@@ -15,9 +15,13 @@ def init_connection():
 # Uses st.experimental_memo decorator to cache (memorize) data for 10 min
 @st.experimental_memo(ttl=600)
 def run_query_pandas(query):
-    with conn.cursor() as cur:
-        cur.execute(query)
-        return cur.fetch_pandas_all()
+	try:
+		with conn.cursor() as cur:
+			cur.execute(query)
+			return cur.fetch_pandas_all()
+	except Exception as e:
+		st.write(str(e))
+		return None
 
 # Main Logic
 
