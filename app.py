@@ -29,8 +29,9 @@ if (option == ''):
 
 st.write('Showing data for {} days'.format(option))
 
+st.write("Connecting to Snowflake...")
 conn = init_connection()
-
+st.write("Connected to Snowflake.")
 sql = '''
 select CAST(usage_date AS DATE) AS usage_date, database_name, 
        max(AVERAGE_DATABASE_BYTES+AVERAGE_FAILSAFE_BYTES)/POWER(1024,3) AS TOTAL_BYTES
@@ -40,11 +41,17 @@ and    usage_date < current_date()
 group  by 1,2
 order  by 1,2
 '''.format(option)
-
-df = run_query_pandas(sql)
+df = None
+st.write("Executing query...")
+try:
+	df = run_query_pandas(sql)
+except Exception as e: 
+	st.write(str(e))
+st.write("Query Complete...")
 
 # write will automatically format a df as a table
 st.write(df)
+st.write("Complete...")
 
 # Stacked Bar chart
 c = alt.Chart(df).mark_bar().encode(
