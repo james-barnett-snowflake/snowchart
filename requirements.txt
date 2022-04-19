@@ -3,4 +3,4 @@ numpy
 pandas
 streamlit
 snowflake-connector-python
-pyarrow=1.0
+pyarrow==1.0
